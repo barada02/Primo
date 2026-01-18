@@ -58,3 +58,32 @@
     font-size: 16px;
     margin-bottom: 16px;
 }
+
+.action-btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    /* Matching date badge generally */
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 12px var(--primary-glow);
+    transition: all 0.2s ease;
+    margin-left: 16px;
+    /* Spacing from date badge */
+    cursor: pointer;
+}
+
+.action-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--primary-glow);
+    filter: brightness(1.1);
+}
+
+.action-btn-primary:active {
+    transform: translateY(0);
+}
