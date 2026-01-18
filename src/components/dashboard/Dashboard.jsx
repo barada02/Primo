@@ -1,7 +1,10 @@
 import React from 'react';
 import './Dashboard.css';
 import TimeChart from './TimeChart';
-import { mockTimeData } from '../../data/mockData';
+import StatCard from './StatCard';
+import TaskRow from '../tasks/TaskRow';
+import { Flame } from 'lucide-react';
+import { mockTimeData, mockStats, mockHabits } from '../../data/mockData';
 
 const Dashboard = () => {
     return (
@@ -23,11 +26,22 @@ const Dashboard = () => {
                     <h3>Time Distribution</h3>
                     <TimeChart data={mockTimeData} />
                 </div>
-                <div className="grid-item glass-panel placeholder-widget">
-                    <h3>Consistency</h3>
+                <div className="grid-item glass-panel">
+                    <StatCard
+                        title="Current Streak"
+                        value={`${mockStats.streak} Days`}
+                        icon={Flame}
+                        type="streak"
+                    />
                 </div>
-                <div className="grid-item span-3 glass-panel placeholder-widget">
-                    <h3>Today's Focus</h3>
+                <div className="grid-item span-3 glass-panel">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                        <h3>Today's Focus</h3>
+                        <button style={{ color: 'var(--primary)', fontSize: '14px', fontWeight: 600 }}>View All</button>
+                    </div>
+                    {mockHabits.map(task => (
+                        <TaskRow key={task.id} task={task} />
+                    ))}
                 </div>
             </div>
         </div>
