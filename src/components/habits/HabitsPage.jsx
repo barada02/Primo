@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HabitCard from './HabitCard';
-import { mockHabits } from '../../data/mockData';
+import { api } from '../../services/api';
 import './HabitsPage.css';
 
 const HabitsPage = () => {
+    const [habits, setHabits] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHabits = async () => {
+            try {
+                const data = await api.getHabits();
+                // Normalize basic data for the card if needed
+                const mapped = data.map(h => ({
+                    ...h,
+                    id: h._id, // Map _id to id for compatibility
+                    goal: h.goalDuration
+                }));
+                setHabits(mapped);
+            } catch (err) {
+                console.error("Failed to fetch habits", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchHabits();
+    }, []);
+
     return (
         <div className="habits-page-container">
             <header className="page-header">
@@ -13,15 +36,21 @@ const HabitsPage = () => {
                 </div>
             </header>
 
-            <div className="habits-grid">
-                {mockHabits.map(habit => (
-                    <HabitCard key={habit.id} habit={habit} />
-                ))}
+            {loading ? (
+                <div className="text-center p-10">Loading habits...</div>
+            ) : (
+                <div className="habits-grid">
+                    {habits.map(habit => (
+                        <HabitCard key={habit.id} habit={habit} />
+                    ))}
 
-                {/* Mocking a few more to show grid layout */}
-                <HabitCard habit={{ id: 99, title: "Meditation", streak: 60, goal: 90, completedToday: true }} />
-                <HabitCard habit={{ id: 98, title: "Journaling", streak: 2, goal: 30, completedToday: false }} />
-            </div>
+                    {habits.length === 0 && (
+                        <div className="text-center col-span-full">
+                            No habits found. Create one from the sidebar!
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -39,5 +39,17 @@ export const api = {
             method: 'PUT'
         });
         return res.json();
+    },
+
+    // Goals
+    getGoals: async () => {
+        const res = await fetch(`${API_BASE}/goals`);
+        return res.json();
+    },
+
+    // Analytics
+    getAnalytics: async () => {
+        const res = await fetch(`${API_BASE}/analytics`);
+        return res.json();
     }
 };
