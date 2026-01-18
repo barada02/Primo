@@ -46,6 +46,14 @@ export const api = {
         const res = await fetch(`${API_BASE}/goals`);
         return res.json();
     },
+    createGoal: async (goalData) => {
+        const res = await fetch(`${API_BASE}/goals`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(goalData)
+        });
+        return res.json();
+    },
 
     // Analytics
     getAnalytics: async () => {

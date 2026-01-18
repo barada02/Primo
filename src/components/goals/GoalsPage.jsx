@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import GoalCard from './GoalCard';
 import { api } from '../../services/api'; // Import API
+import CreateGoalModal from './CreateGoalModal';
 import './GoalsPage.css';
 
 const GoalsPage = () => {
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -19,7 +22,12 @@ const GoalsPage = () => {
       }
     };
     fetchGoals();
-  }, []);
+  }, [refreshKey]);
+
+  const handleGoalCreated = () => {
+    setRefreshKey(prev => prev + 1);
+    setIsModalOpen(false);
+  };
 
   if (loading) {
     return <div className="p-10 text-center">Loading Vision Board...</div>;
@@ -33,7 +41,11 @@ const GoalsPage = () => {
           <h1>Vision Board</h1>
           <p className="subtitle">Your north star metrics.</p>
         </header>
-        <div className="empty-state">No goals set. Create one to get started!</div>
+        <div className="empty-state">
+          <p>No goals set yet.</p>
+          <button className="btn-create" onClick={() => setIsModalOpen(true)}>+ Create First Goal</button>
+        </div>
+        {isModalOpen && <CreateGoalModal onClose={() => setIsModalOpen(false)} onSuccess={handleGoalCreated} />}
       </div>
     );
   }
@@ -64,12 +76,14 @@ const GoalsPage = () => {
           {otherGoals.map(goal => (
             <GoalCard key={goal._id} goal={goal} />
           ))}
-          {/* Add a placeholder empty card for "Add Goal" later */}
-          <div className="add-goal-card">
+          {/* Add Goal Card */}
+          <div className="add-goal-card" onClick={() => setIsModalOpen(true)}>
             <span>+ New Goal</span>
           </div>
         </div>
       </section>
+
+      {isModalOpen && <CreateGoalModal onClose={() => setIsModalOpen(false)} onSuccess={handleGoalCreated} />}
     </div>
   );
 };

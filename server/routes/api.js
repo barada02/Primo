@@ -107,6 +107,17 @@ router.get('/goals', async (req, res) => {
     }
 });
 
+router.post('/goals', async (req, res) => {
+    const userId = await getDemoUserId();
+    try {
+        const newGoal = new Goal({ ...req.body, userId });
+        const saved = await newGoal.save();
+        res.status(201).json(saved);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 // --- ANALYTICS ROUTES ---
 router.get('/analytics', async (req, res) => {
     const userId = await getDemoUserId();
