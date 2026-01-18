@@ -48,8 +48,8 @@ const AnalyticsPage = () => {
                 <section className="analytics-section half-width glass-panel">
                     <h2 className="section-title">Weekly Focus Trend</h2>
                     <div className="chart-wrapper">
-                        <ResponsiveContainer width="100%" height={250}>
-                            <LineChart data={mockTrendData}>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={mockTrendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                 <XAxis
                                     dataKey="day"
                                     stroke="var(--text-3)"
@@ -81,8 +81,8 @@ const AnalyticsPage = () => {
                 <section className="analytics-section half-width glass-panel">
                     <h2 className="section-title">Life Balance</h2>
                     <div className="chart-wrapper">
-                        <ResponsiveContainer width="100%" height={250}>
-                            <RadarChart cx="50%" cy="50%" outerRadius="70%" data={mockCategoryData}>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={mockCategoryData}>
                                 <PolarGrid stroke="var(--bg-surface-3)" />
                                 <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--text-2)', fontSize: 11 }} />
                                 <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} axisLine={false} />
