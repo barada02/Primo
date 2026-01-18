@@ -1,0 +1,44 @@
+.goals-page-container {
+  padding: 40px;
+}
+
+.section-label {
+  font-size: 14px;
+  color: var(--text-3);
+  margin-bottom: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.goals-hero-section {
+  margin-bottom: 48px;
+}
+
+.hero-wrapper {
+  height: 300px; /* Taller for hero */
+}
+
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.add-goal-card {
+  border: 2px dashed var(--bg-surface-3);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-goal-card:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--bg-surface-2);
+}

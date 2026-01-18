@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Dashboard.css';
 import TimeChart from './TimeChart';
 import StatCard from './StatCard';
 import TaskRow from '../tasks/TaskRow';
-import CreateTaskModal from '../tasks/CreateTaskModal';
-import { Flame, Plus } from 'lucide-react';
-import { mockTimeData, mockStats, mockHabits } from '../../data/mockData';
+import { Flame } from 'lucide-react';
+import { mockTimeData, mockStats, getTodaysfocus } from '../../data/mockData';
 
 const Dashboard = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
     return (
         <div className="dashboard-container">
             <header className="dashboard-header">
@@ -19,10 +16,6 @@ const Dashboard = () => {
                 </div>
                 <div className="header-actions">
                     <span className="date-badge">Jan 18, 2026</span>
-                    <button className="action-btn-primary" onClick={() => setIsModalOpen(true)}>
-                        <Plus size={20} />
-                        <span>New Habit</span>
-                    </button>
                 </div>
             </header>
 
@@ -45,12 +38,11 @@ const Dashboard = () => {
                         <h3>Today's Focus</h3>
                         <button style={{ color: 'var(--primary)', fontSize: '14px', fontWeight: 600 }}>View All</button>
                     </div>
-                    {mockHabits.map(task => (
+                    {getTodaysfocus().map(task => (
                         <TaskRow key={task.id} task={task} />
                     ))}
                 </div>
             </div>
-            {isModalOpen && <CreateTaskModal onClose={() => setIsModalOpen(false)} />}
         </div>
     );
 };
