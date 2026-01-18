@@ -5,11 +5,22 @@ import HabitsPage from './components/habits/HabitsPage'
 import GoalsPage from './components/goals/GoalsPage'
 import AnalyticsPage from './components/analytics/AnalyticsPage'
 import CreateTaskModal from './components/tasks/CreateTaskModal'
+import LandingPage from './components/landing/LandingPage'
 import './index.css'
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [activeTab, setActiveTab] = useState('dashboard')
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  if (!isAuthenticated) {
+    return (
+      <LandingPage
+        onLogin={() => setIsAuthenticated(true)}
+        onVisitorAccess={() => setIsAuthenticated(true)}
+      />
+    )
+  }
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
