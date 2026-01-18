@@ -1,12 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import TimeChart from './TimeChart';
 import StatCard from './StatCard';
 import TaskRow from '../tasks/TaskRow';
 import { Flame } from 'lucide-react';
-import { mockTimeData, mockStats, getTodaysfocus } from '../../data/mockData';
+import { mockTimeData, mockStats } from '../../data/mockData'; // Keeping partial mocks for now
+import { api } from '../../services/api';
 
 const Dashboard = () => {
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [habits, nuclearTasks] = await Promise.all([
+                    api.getHabits(),
+                    api.getTasks()
+                ]);
+
+                // Normalize and merge data
+                const normalizedHabits = habits.map(h => ({
+                    ...h,
+                    type: 'habit',
+                    // Default values if missing
+                    streak: h.streak || 0,
+                    goal: h.goalDuration || 21
+                }));
+
+                const normalizedTasks = nuclearTasks.map(t => ({
+                    ...t,
+                    type: 'nuclear',
+                    time: t.reminderTime,
+                    completedToday: t.isCompleted
+                }));
+
+                // Combine and Sort
+                const united = [...normalizedHabits, ...normalizedTasks].sort((a, b) => {
+                    // Sort logic: time exists first, then by creation?
+                    // Simple demo sort:
+                    if (a.time && !b.time) return -1;
+                    if (!a.time && b.time) return 1;
+                    if (a.time && b.time) return a.time.localeCompare(b.time);
+                    return 0;
+                });
+
+                setTasks(united);
+            } catch (err) {
+                console.error("Failed to load dashboard data", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div className="dashboard-container">
             <header className="dashboard-header">
@@ -15,7 +64,9 @@ const Dashboard = () => {
                     <p className="subtitle">Let's make today count.</p>
                 </div>
                 <div className="header-actions">
-                    <span className="date-badge">Jan 18, 2026</span>
+                    <span className="date-badge">
+                        {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
                 </div>
             </header>
 
@@ -38,9 +89,18 @@ const Dashboard = () => {
                         <h3>Today's Focus</h3>
                         <button style={{ color: 'var(--primary)', fontSize: '14px', fontWeight: 600 }}>View All</button>
                     </div>
-                    {getTodaysfocus().map(task => (
-                        <TaskRow key={task.id} task={task} />
-                    ))}
+
+                    {loading ? (
+                        <div style={{ padding: 20, textAlign: 'center', color: 'var(--text-3)' }}>Loading your day...</div>
+                    ) : tasks.length === 0 ? (
+                        <div style={{ padding: 20, textAlign: 'center', color: 'var(--text-3)' }}>
+                            No tasks yet. Click "Create New" to start!
+                        </div>
+                    ) : (
+                        tasks.map(task => (
+                            <TaskRow key={task._id} task={task} />
+                        ))
+                    )}
                 </div>
             </div>
         </div>
