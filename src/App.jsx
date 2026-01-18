@@ -3,6 +3,7 @@ import Sidebar from './components/layout/Sidebar'
 import Dashboard from './components/dashboard/Dashboard'
 import HabitsPage from './components/habits/HabitsPage'
 import GoalsPage from './components/goals/GoalsPage'
+import AnalyticsPage from './components/analytics/AnalyticsPage'
 import CreateTaskModal from './components/tasks/CreateTaskModal'
 import './index.css'
 
@@ -22,6 +23,7 @@ function App() {
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'habits' && <HabitsPage />}
         {activeTab === 'goals' && <GoalsPage />}
+        {activeTab === 'analytics' && <AnalyticsPage />}
         {/* Placeholders for other tabs */}
       </main>
 

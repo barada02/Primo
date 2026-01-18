@@ -51,3 +51,51 @@ export const mockHabits = [
     { id: 2, title: 'Read 20 pages', streak: 12, goal: 21, completedToday: false, goalId: 3 },
     { id: 3, title: 'Code 4 hours', streak: 5, goal: 100, completedToday: false, goalId: 1 },
 ];
+
+// --- Analytics Data ---
+
+// 1. Productivity Trend (Last 7 days)
+export const mockTrendData = [
+    { day: 'Mon', score: 65 },
+    { day: 'Tue', score: 55 },
+    { day: 'Wed', score: 80 },
+    { day: 'Thu', score: 90 },
+    { day: 'Fri', score: 85 },
+    { day: 'Sat', score: 40 },
+    { day: 'Sun', score: 70 },
+];
+
+// 2. Category Radar Data
+export const mockCategoryData = [
+    { subject: 'Work', A: 120, fullMark: 150 },
+    { subject: 'Health', A: 98, fullMark: 150 },
+    { subject: 'Growth', A: 86, fullMark: 150 },
+    { subject: 'Social', A: 99, fullMark: 150 },
+    { subject: 'Life', A: 85, fullMark: 150 },
+    { subject: 'Spirit', A: 65, fullMark: 150 },
+];
+
+// 3. Heatmap Data Generator (Last 365 days mock)
+export const generateHeatmapData = () => {
+    const data = [];
+    const today = new Date();
+    for (let i = 364; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+
+        // Random intensity 0-4
+        // Higher chance of 0 to make it realistic
+        let intensity = 0;
+        const rand = Math.random();
+        if (rand > 0.8) intensity = 4;
+        else if (rand > 0.6) intensity = 3;
+        else if (rand > 0.4) intensity = 2;
+        else if (rand > 0.2) intensity = 1;
+
+        data.push({
+            date: d.toISOString().split('T')[0],
+            intensity: intensity
+        });
+    }
+    return data;
+};

@@ -1,0 +1,106 @@
+.analytics-page-container {
+    padding: 40px;
+}
+
+.analytics-section {
+    margin-bottom: 32px;
+}
+
+.section-title {
+    font-size: 16px;
+    color: var(--text-2);
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+/* Heatmap */
+.heatmap-container {
+    padding: 24px;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    /* 7 days a week vertically usually, but simplistic grid here */
+    grid-auto-flow: column;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+/* 
+ * If we display 365 items, grid-template-rows: repeat(7, ...) and grid-auto-flow: column 
+ * makes it look like the GitHub contribution graph 
+ */
+
+.heatmap-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--bg-surface-3);
+    /* Level 0 */
+    transition: all 0.2s;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.4);
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.intensity-0 {
+    background: var(--bg-surface-3);
+    opacity: 0.3;
+}
+
+.intensity-1 {
+    background: var(--primary);
+    opacity: 0.3;
+}
+
+.intensity-2 {
+    background: var(--primary);
+    opacity: 0.5;
+}
+
+.intensity-3 {
+    background: var(--primary);
+    opacity: 0.8;
+}
+
+.intensity-4 {
+    background: var(--accent);
+    opacity: 1;
+    box-shadow: 0 0 6px var(--accent);
+}
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-3);
+}
+
+.legend-cells {
+    display: flex;
+    gap: 4px;
+}
+
+/* Charts Row */
+.analytics-charts-row {
+    display: flex;
+    gap: 24px;
+}
+
+.half-width {
+    flex: 1;
+    padding: 24px;
+    min-height: 350px;
+}
+
+.chart-wrapper {
+    margin-top: 16px;
+}
