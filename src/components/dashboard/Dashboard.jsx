@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Dashboard.css';
 import TimeChart from './TimeChart';
 import StatCard from './StatCard';
 import TaskRow from '../tasks/TaskRow';
-import { Flame } from 'lucide-react';
+import CreateTaskModal from '../tasks/CreateTaskModal';
+import { Flame, Plus } from 'lucide-react';
 import { mockTimeData, mockStats, mockHabits } from '../../data/mockData';
 
 const Dashboard = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className="dashboard-container">
             <header className="dashboard-header">
@@ -15,8 +18,11 @@ const Dashboard = () => {
                     <p className="subtitle">Let's make today count.</p>
                 </div>
                 <div className="header-actions">
-                    {/* Placeholder for date/time or actions */}
                     <span className="date-badge">Jan 18, 2026</span>
+                    <button className="action-btn-primary" onClick={() => setIsModalOpen(true)}>
+                        <Plus size={20} />
+                        <span>New Habit</span>
+                    </button>
                 </div>
             </header>
 
@@ -44,6 +50,7 @@ const Dashboard = () => {
                     ))}
                 </div>
             </div>
+            {isModalOpen && <CreateTaskModal onClose={() => setIsModalOpen(false)} />}
         </div>
     );
 };
