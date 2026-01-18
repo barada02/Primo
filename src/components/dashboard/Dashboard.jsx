@@ -1,5 +1,7 @@
 import React from 'react';
 import './Dashboard.css';
+import TimeChart from './TimeChart';
+import { mockTimeData } from '../../data/mockData';
 
 const Dashboard = () => {
     return (
@@ -17,8 +19,9 @@ const Dashboard = () => {
 
             <div className="dashboard-grid">
                 {/* We will populate these next */}
-                <div className="grid-item span-2 glass-panel placeholder-widget">
+                <div className="grid-item span-2 glass-panel">
                     <h3>Time Distribution</h3>
+                    <TimeChart data={mockTimeData} />
                 </div>
                 <div className="grid-item glass-panel placeholder-widget">
                     <h3>Consistency</h3>
