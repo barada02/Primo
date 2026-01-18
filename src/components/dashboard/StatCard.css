@@ -1,0 +1,61 @@
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.stat-title {
+    color: var(--text-2);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stat-icon {
+    color: var(--accent);
+}
+
+.stat-body {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-1);
+    letter-spacing: -1px;
+}
+
+.stat-subtext {
+    color: var(--success);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Streak Visuals */
+.streak-visual {
+    display: flex;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.streak-dot {
+    width: 8px;
+    height: 24px;
+    background: var(--bg-surface-3);
+    border-radius: 4px;
+}
+
+.streak-dot.active {
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+}
