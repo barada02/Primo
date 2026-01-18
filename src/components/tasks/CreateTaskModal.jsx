@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Tag, Target, Clock, MessageSquare } from 'lucide-react';
+import { X, Calendar, Clock, AlertCircle, Target, Tag } from 'lucide-react';
+import { api } from '../../services/api';
 import './CreateTaskModal.css';
 
-const CreateTaskModal = ({ onClose }) => {
-    const [type, setType] = useState('habit'); // 'habit' | 'nuclear'
+const CreateTaskModal = ({ onClose, onSuccess }) => {
+    const [mode, setMode] = useState('habit'); // 'habit' or 'nuclear'
+    const [loading, setLoading] = useState(false);
 
     // Common
     const [title, setTitle] = useState('');
+    const [availableGoals, setAvailableGoals] = useState([]);
 
     // Habit State
-    const [goal, setGoal] = useState(''); // Habits belong to Goals
+    const [goalId, setGoalId] = useState(''); // Stores the ID now
     const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
     const [endDate, setEndDate] = useState('');
     const [duration, setDuration] = useState(21);
@@ -20,15 +23,28 @@ const CreateTaskModal = ({ onClose }) => {
     const [description, setDescription] = useState('');
     const [reminder, setReminder] = useState('');
 
+    // Fetch Goals for Dropdown
+    useEffect(() => {
+        const loadGoals = async () => {
+            try {
+                const goals = await api.getGoals();
+                setAvailableGoals(goals);
+            } catch (err) {
+                console.error("Failed to load goals for partial", err);
+            }
+        };
+        if (mode === 'habit') loadGoals();
+    }, [mode]);
+
     // Calculate End Date based on Start Date + Duration
     useEffect(() => {
-        if (type === 'habit' && startDate && duration) {
+        if (mode === 'habit' && startDate && duration) {
             const start = new Date(startDate);
             const end = new Date(start);
             end.setDate(start.getDate() + parseInt(duration));
             setEndDate(end.toISOString().split('T')[0]);
         }
-    }, [startDate, duration, type]);
+    }, [startDate, duration, mode]);
 
     const handleDurationChange = (days) => {
         setDuration(days);
@@ -46,6 +62,38 @@ const CreateTaskModal = ({ onClose }) => {
         }
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            if (mode === 'habit') {
+                await api.createHabit({
+                    userId: 'demo_user',
+                    title: title,
+                    motivation: motivation,
+                    goalDuration: duration,
+                    goalId: goalId // Sending the ID
+                });
+            } else {
+                await api.createTask({
+                    userId: 'demo_user',
+                    title: title,
+                    category: category,
+                    notes: description,
+                    reminderTime: reminder
+                });
+            }
+            if (onSuccess) onSuccess();
+            else onClose();
+        } catch (err) {
+            console.error("Failed to create", err);
+            alert("Failed to create item.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="modal-overlay">
             <div className="modal-content glass-panel">
@@ -60,14 +108,14 @@ const CreateTaskModal = ({ onClose }) => {
                     {/* Type Toggle */}
                     <div className="type-toggle">
                         <button
-                            className={`type-btn ${type === 'habit' ? 'active' : ''}`}
-                            onClick={() => setType('habit')}
+                            className={`type-btn ${mode === 'habit' ? 'active' : ''}`}
+                            onClick={() => setMode('habit')}
                         >
                             Habit
                         </button>
                         <button
-                            className={`type-btn ${type === 'nuclear' ? 'active' : ''}`}
-                            onClick={() => setType('nuclear')}
+                            className={`type-btn ${mode === 'nuclear' ? 'active' : ''}`}
+                            onClick={() => setMode('nuclear')}
                         >
                             Nuclear Task
                         </button>
@@ -77,26 +125,31 @@ const CreateTaskModal = ({ onClose }) => {
                         <label>Title</label>
                         <input
                             type="text"
-                            placeholder={type === 'habit' ? "e.g., Morning Run" : "e.g., Buy Groceries"}
+                            placeholder={mode === 'habit' ? "e.g., Morning Run" : "e.g., Buy Groceries"}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
                     </div>
 
                     {/* HABIT SPECIFIC FIELDS */}
-                    {type === 'habit' && (
+                    {mode === 'habit' && (
                         <>
                             <div className="input-group">
                                 <label>Linked Goal</label>
                                 <div className="select-wrapper">
                                     <Target size={16} className="input-icon" />
-                                    <input
-                                        type="text"
-                                        placeholder="e.g., Get Fit for Summer"
-                                        value={goal}
-                                        onChange={(e) => setGoal(e.target.value)}
+                                    <select
+                                        value={goalId}
+                                        onChange={(e) => setGoalId(e.target.value)}
                                         style={{ paddingLeft: '40px' }}
-                                    />
+                                    >
+                                        <option value="">-- Select a Goal --</option>
+                                        {availableGoals.map(g => (
+                                            <option key={g._id} value={g._id}>
+                                                {g.title}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
@@ -158,7 +211,7 @@ const CreateTaskModal = ({ onClose }) => {
                     )}
 
                     {/* NUCLEAR TASK SPECIFIC FIELDS */}
-                    {type === 'nuclear' && (
+                    {mode === 'nuclear' && (
                         <>
                             <div className="input-group">
                                 <label>Category</label>
@@ -202,9 +255,9 @@ const CreateTaskModal = ({ onClose }) => {
                     )}
 
                     <div className="modal-footer">
-                        <button className="btn-cancel" onClick={onClose}>Cancel</button>
-                        <button className="btn-create">
-                            Create {type === 'habit' ? 'Habit' : 'Task'}
+                        <button className="btn-cancel" onClick={onClose} disabled={loading}>Cancel</button>
+                        <button className="btn-create" onClick={handleSubmit} disabled={loading}>
+                            {loading ? 'Creating...' : `Create ${mode === 'habit' ? 'Habit' : 'Task'}`}
                         </button>
                     </div>
                 </div>
