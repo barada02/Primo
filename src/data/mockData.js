@@ -6,13 +6,12 @@ export const mockTimeData = [
 ];
 
 export const mockStats = {
-    streak: 12,
+    streak: 12, // Global "Perfect Day" streak
     tasksCompleted: 8,
     totalTasks: 10,
     productivityScore: 85,
 };
 
-// Goals are the parent containers
 export const mockGoals = [
     {
         id: 1,
@@ -21,7 +20,7 @@ export const mockGoals = [
         motivation: "I want to build my own startup ideas.",
         deadline: "2026-06-30",
         progress: 35,
-        theme: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", // Custom gradient
+        theme: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         stats: { habits: 2, tasks: 5, completed: 1 }
     },
     {
@@ -47,14 +46,28 @@ export const mockGoals = [
 ];
 
 export const mockHabits = [
-    { id: 1, title: 'Morning Run', streak: 45, goal: 75, completedToday: true, goalId: 2 },
-    { id: 2, title: 'Read 20 pages', streak: 12, goal: 21, completedToday: false, goalId: 3 },
-    { id: 3, title: 'Code 4 hours', streak: 5, goal: 100, completedToday: false, goalId: 1 },
+    { id: 1, type: 'habit', title: 'Morning Run', streak: 45, goal: 75, completedToday: true, goalId: 2, time: '06:00' },
+    { id: 2, type: 'habit', title: 'Read 20 pages', streak: 12, goal: 21, completedToday: false, goalId: 3, time: '21:00' },
+    { id: 3, type: 'habit', title: 'Code 4 hours', streak: 5, goal: 100, completedToday: false, goalId: 1, time: '10:00' },
 ];
 
-// --- Analytics Data ---
+export const mockTasks = [
+    { id: 101, type: 'nuclear', title: 'Buy Groceries', category: 'Life', completedToday: false, time: '17:00' },
+    { id: 102, type: 'nuclear', title: 'Call Mom', category: 'Family', completedToday: false, time: '19:00' },
+    { id: 103, type: 'nuclear', title: 'Finish API Docs', category: 'Work', completedToday: true, time: '14:00' },
+];
 
-// 1. Productivity Trend (Last 7 days)
+export const getTodaysfocus = () => {
+    // Merge and sort by time
+    const all = [...mockHabits, ...mockTasks];
+    return all.sort((a, b) => {
+        if (!a.time) return 1;
+        if (!b.time) return -1;
+        return a.time.localeCompare(b.time);
+    });
+};
+
+/* ... Analytics Data (same as before) ... */
 export const mockTrendData = [
     { day: 'Mon', score: 65 },
     { day: 'Tue', score: 55 },
@@ -65,7 +78,6 @@ export const mockTrendData = [
     { day: 'Sun', score: 70 },
 ];
 
-// 2. Category Radar Data
 export const mockCategoryData = [
     { subject: 'Work', A: 120, fullMark: 150 },
     { subject: 'Health', A: 98, fullMark: 150 },
@@ -75,16 +87,12 @@ export const mockCategoryData = [
     { subject: 'Spirit', A: 65, fullMark: 150 },
 ];
 
-// 3. Heatmap Data Generator (Last 365 days mock)
 export const generateHeatmapData = () => {
     const data = [];
     const today = new Date();
     for (let i = 364; i >= 0; i--) {
         const d = new Date(today);
         d.setDate(d.getDate() - i);
-
-        // Random intensity 0-4
-        // Higher chance of 0 to make it realistic
         let intensity = 0;
         const rand = Math.random();
         if (rand > 0.8) intensity = 4;

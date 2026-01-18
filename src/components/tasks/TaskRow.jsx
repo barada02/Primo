@@ -17,9 +17,22 @@ const TaskRow = ({ task }) => {
                 <div className="task-info">
                     <span className="task-title">{task.title}</span>
                     <div className="task-meta">
-                        <span className="task-category">Habit</span>
-                        <span className="meta-dot">•</span>
-                        <span className="task-streak">🔥 {task.streak}/{task.goal} days</span>
+                        {task.time && (
+                            <>
+                                <span className="task-time" style={{ color: 'var(--primary)', fontWeight: 600 }}>
+                                    {task.time}
+                                </span>
+                                <span className="meta-dot">•</span>
+                            </>
+                        )}
+                        <span className="task-category">{task.category || 'Habit'}</span>
+
+                        {task.type === 'habit' && (
+                            <>
+                                <span className="meta-dot">•</span>
+                                <span className="task-streak">🔥 {task.streak}/{task.goal} days</span>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import TimeChart from './TimeChart';
 import StatCard from './StatCard';
 import TaskRow from '../tasks/TaskRow';
 import { Flame } from 'lucide-react';
-import { mockTimeData, mockStats, mockHabits } from '../../data/mockData';
+import { mockTimeData, mockStats, getTodaysfocus } from '../../data/mockData';
 
 const Dashboard = () => {
     return (
@@ -38,7 +38,7 @@ const Dashboard = () => {
                         <h3>Today's Focus</h3>
                         <button style={{ color: 'var(--primary)', fontSize: '14px', fontWeight: 600 }}>View All</button>
                     </div>
-                    {mockHabits.map(task => (
+                    {getTodaysfocus().map(task => (
                         <TaskRow key={task.id} task={task} />
                     ))}
                 </div>
