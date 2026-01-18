@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Sidebar from './components/layout/Sidebar'
 import Dashboard from './components/dashboard/Dashboard'
+import HabitsPage from './components/habits/HabitsPage'
 import CreateTaskModal from './components/tasks/CreateTaskModal'
 import './index.css'
 
@@ -18,8 +19,9 @@ function App() {
 
       <main style={{ flex: 1, overflowY: 'auto', position: 'relative' }}>
         {activeTab === 'dashboard' && <Dashboard />}
+        {activeTab === 'habits' && <HabitsPage />}
         {/* Placeholders for other tabs */}
-        {activeTab === 'habits' && <div className="p-10">Habits View (Coming Soon)</div>}
+        {activeTab === 'goals' && <div className="p-10">Goals View (Coming Soon)</div>}
       </main>
 
       {isModalOpen && <CreateTaskModal onClose={() => setIsModalOpen(false)} />}
