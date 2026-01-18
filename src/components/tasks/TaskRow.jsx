@@ -2,11 +2,11 @@ import React from 'react';
 import { Circle, CheckCircle, MoreVertical } from 'lucide-react';
 import './TaskRow.css';
 
-const TaskRow = ({ task }) => {
+const TaskRow = ({ task, onToggle }) => {
     return (
         <div className={`task-row ${task.completedToday ? 'completed' : ''}`}>
             <div className="task-left">
-                <button className="check-btn">
+                <button className="check-btn" onClick={() => onToggle(task)}>
                     {task.completedToday ? (
                         <CheckCircle className="icon-checked" size={20} />
                     ) : (

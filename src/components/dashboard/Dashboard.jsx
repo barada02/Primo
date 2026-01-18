@@ -4,7 +4,7 @@ import TimeChart from './TimeChart';
 import StatCard from './StatCard';
 import TaskRow from '../tasks/TaskRow';
 import { Flame } from 'lucide-react';
-import { mockTimeData, mockStats } from '../../data/mockData'; // Keeping partial mocks for now
+import { mockTimeData, mockStats } from '../../data/mockData';
 import { api } from '../../services/api';
 
 const Dashboard = () => {
@@ -23,7 +23,6 @@ const Dashboard = () => {
                 const normalizedHabits = habits.map(h => ({
                     ...h,
                     type: 'habit',
-                    // Default values if missing
                     streak: h.streak || 0,
                     goal: h.goalDuration || 21
                 }));
@@ -37,8 +36,6 @@ const Dashboard = () => {
 
                 // Combine and Sort
                 const united = [...normalizedHabits, ...normalizedTasks].sort((a, b) => {
-                    // Sort logic: time exists first, then by creation?
-                    // Simple demo sort:
                     if (a.time && !b.time) return -1;
                     if (!a.time && b.time) return 1;
                     if (a.time && b.time) return a.time.localeCompare(b.time);
@@ -56,6 +53,26 @@ const Dashboard = () => {
         fetchData();
     }, []);
 
+    const handleToggle = async (task) => {
+        // Optimistic UI Update
+        const updatedTasks = tasks.map(t =>
+            t._id === task._id ? { ...t, completedToday: !t.completedToday } : t
+        );
+        setTasks(updatedTasks);
+
+        try {
+            if (task.type === 'habit') {
+                await api.checkInHabit(task._id);
+            } else {
+                await api.toggleTask(task._id);
+            }
+        } catch (err) {
+            console.error("Failed to toggle", err);
+            // Revert on error (fetching again would be safer but keeping simple for now)
+            setTasks(tasks);
+        }
+    };
+
     return (
         <div className="dashboard-container">
             <header className="dashboard-header">
@@ -71,7 +88,6 @@ const Dashboard = () => {
             </header>
 
             <div className="dashboard-grid">
-                {/* We will populate these next */}
                 <div className="grid-item span-2 glass-panel">
                     <h3>Time Distribution</h3>
                     <TimeChart data={mockTimeData} />
@@ -98,7 +114,7 @@ const Dashboard = () => {
                         </div>
                     ) : (
                         tasks.map(task => (
-                            <TaskRow key={task._id} task={task} />
+                            <TaskRow key={task._id} task={task} onToggle={handleToggle} />
                         ))
                     )}
                 </div>

@@ -9,9 +9,10 @@ const CreateTaskModal = ({ onClose, onSuccess }) => {
 
     // Common
     const [title, setTitle] = useState('');
+    const [availableGoals, setAvailableGoals] = useState([]);
 
     // Habit State
-    const [goal, setGoal] = useState('');
+    const [goalId, setGoalId] = useState(''); // Stores the ID now
     const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
     const [endDate, setEndDate] = useState('');
     const [duration, setDuration] = useState(21);
@@ -21,6 +22,19 @@ const CreateTaskModal = ({ onClose, onSuccess }) => {
     const [category, setCategory] = useState('General');
     const [description, setDescription] = useState('');
     const [reminder, setReminder] = useState('');
+
+    // Fetch Goals for Dropdown
+    useEffect(() => {
+        const loadGoals = async () => {
+            try {
+                const goals = await api.getGoals();
+                setAvailableGoals(goals);
+            } catch (err) {
+                console.error("Failed to load goals for partial", err);
+            }
+        };
+        if (mode === 'habit') loadGoals();
+    }, [mode]);
 
     // Calculate End Date based on Start Date + Duration
     useEffect(() => {
@@ -55,11 +69,11 @@ const CreateTaskModal = ({ onClose, onSuccess }) => {
         try {
             if (mode === 'habit') {
                 await api.createHabit({
-                    userId: 'demo_user', // Mock user ID
+                    userId: 'demo_user',
                     title: title,
                     motivation: motivation,
                     goalDuration: duration,
-                    // linkedGoalId: goal
+                    goalId: goalId // Sending the ID
                 });
             } else {
                 await api.createTask({
@@ -124,13 +138,18 @@ const CreateTaskModal = ({ onClose, onSuccess }) => {
                                 <label>Linked Goal</label>
                                 <div className="select-wrapper">
                                     <Target size={16} className="input-icon" />
-                                    <input
-                                        type="text"
-                                        placeholder="e.g., Get Fit for Summer"
-                                        value={goal}
-                                        onChange={(e) => setGoal(e.target.value)}
+                                    <select
+                                        value={goalId}
+                                        onChange={(e) => setGoalId(e.target.value)}
                                         style={{ paddingLeft: '40px' }}
-                                    />
+                                    >
+                                        <option value="">-- Select a Goal --</option>
+                                        {availableGoals.map(g => (
+                                            <option key={g._id} value={g._id}>
+                                                {g.title}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
