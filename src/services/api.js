@@ -59,5 +59,15 @@ export const api = {
     getAnalytics: async () => {
         const res = await fetch(`${API_BASE}/analytics`);
         return res.json();
+    },
+
+    // AI
+    sendChat: async (message, history) => {
+        const res = await fetch(`${API_BASE}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, history })
+        });
+        return res.json();
     }
 };
