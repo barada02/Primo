@@ -1,8 +1,7 @@
-import React from 'react';
-import { LayoutDashboard, CheckCircle, Target, PieChart, Settings } from 'lucide-react';
+import { LayoutDashboard, CheckCircle, Target, PieChart, Settings, Plus } from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, onOpenCreate }) => {
     const menuItems = [
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'habits', label: 'Habits', icon: CheckCircle },
@@ -16,6 +15,11 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                 <div className="logo-icon">P</div>
                 <span className="logo-text">Primo</span>
             </div>
+
+            <button className="create-btn" onClick={onOpenCreate}>
+                <Plus size={20} />
+                <span>Create New</span>
+            </button>
 
             <nav className="nav-menu">
                 {menuItems.map((item) => {
