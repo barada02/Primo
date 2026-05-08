@@ -46,10 +46,28 @@ export const api = {
         const res = await fetch(`${API_BASE}/goals`);
         return res.json();
     },
+    createGoal: async (goalData) => {
+        const res = await fetch(`${API_BASE}/goals`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(goalData)
+        });
+        return res.json();
+    },
 
     // Analytics
     getAnalytics: async () => {
         const res = await fetch(`${API_BASE}/analytics`);
+        return res.json();
+    },
+
+    // AI
+    sendChat: async (message, history) => {
+        const res = await fetch(`${API_BASE}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, history })
+        });
         return res.json();
     }
 };

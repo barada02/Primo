@@ -6,6 +6,7 @@ import GoalsPage from './components/goals/GoalsPage'
 import AnalyticsPage from './components/analytics/AnalyticsPage'
 import CreateTaskModal from './components/tasks/CreateTaskModal'
 import LandingPage from './components/landing/LandingPage'
+import ChatWidget from './components/chat/ChatWidget'
 import './index.css'
 
 function App() {
@@ -45,6 +46,9 @@ function App() {
       </main>
 
       {isModalOpen && <CreateTaskModal onClose={() => setIsModalOpen(false)} onSuccess={handleTaskCreated} />}
+
+      {/* AI Concierge */}
+      <ChatWidget />
     </div>
   )
 }

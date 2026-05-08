@@ -1,16 +1,37 @@
-# React + Vite
+# Primo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Primo is an AI-powered personal productivity, goal, and habit-tracking application.
 
-Currently, two official plugins are available:
+## How to Resume / Start the Application
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To run the application locally, you will need two separate terminal windows—one for the frontend and one for the backend.
 
-## React Compiler
+### 1. Prerequisites
+Ensure you have the following installed:
+- [Node.js](https://nodejs.org/)
+- MongoDB (running locally or a MongoDB Atlas URI)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Environment Setup
+Create a `.env` file in the \`server/\` directory with the following variables:
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+# Add your Gemini/Google Generative AI key if needed
+```
 
-## Expanding the ESLint configuration
+### 3. Start the Backend Server
+Open a terminal and navigate to the \`server\` directory:
+```bash
+cd server
+npm install    # if you haven't installed dependencies yet
+npm run dev    # starts the backend on http://localhost:5000 using nodemon
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 4. Start the Frontend Application
+Open a second terminal and stay in the root directory:
+```bash
+npm install    # if you haven't installed dependencies yet
+npm run dev    # starts the Vite React frontend
+```
+
+Once both are running, open the local URL provided by Vite (usually \`http://localhost:5173\`) in your browser.
